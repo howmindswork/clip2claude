@@ -7,7 +7,7 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
@@ -31,10 +31,10 @@ jobs:
           mkdir -p /home/luke/.venvs/tools/bin
           ln -s /tmp/render-env/bin/yt-dlp /home/luke/.venvs/tools/bin/yt-dlp
           ffmpeg -version
-      - name: Render eight preview edits using the shared FFmpeg tools
+      - name: Finish ten previews with one worker and shared tools
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/render-previews.py
+          timeout 1260 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/finish-ten.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -42,8 +42,8 @@ jobs:
           from pathlib import Path
           import tarfile
           p=Path('/home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120')
-          names=['preview-render-receipts.json']
-          names += [str(f.relative_to(p)) for pattern in ['edits/*/preview.mp4','edits/*/contact.png','edits/*/*.json'] for f in p.glob(pattern) if f.is_file()]
+          names=['ten-final-render-receipts.json','youtube-intake-receipts.json']
+          names += [str(f.relative_to(p)) for pattern in ['edits/*/preview.mp4','edits/*/final-contact.png','edits/*/*.json','source-inspection/yt-*','source-media/yt-*.mp4','source-proxies/yt-*.mp4','review-segments/*.mp4'] for f in p.glob(pattern) if f.is_file()]
           with tarfile.open('/tmp/render-output.tar','w') as t:
               for name in names:
                   f=p/name
@@ -51,4 +51,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Complete shared FFmpeg package, preview3.
+# Complete shared FFmpeg package, ten-final1.
