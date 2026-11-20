@@ -1,0 +1,52 @@
+name: Temporary isolated video render
+on:
+  push:
+    branches: [codex/campaign-previews-20261120]
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RENDER_TAG: campaign-intake-20261120-2245
+      RENDER_ID: '453254405'
+    steps:
+      - name: Fetch private temporary media
+        shell: bash
+        run: |
+          RENDER_ASSET=$(gh api "repos/$GH_REPO/releases/$RENDER_ID/assets" --jq '.[] | select(.name=="render-input.tar") | .id')
+          gh api -H 'Accept: application/octet-stream' "repos/$GH_REPO/releases/assets/$RENDER_ASSET" > /tmp/render-input.tar
+          sudo mkdir -p /home/luke/hmw-content
+          sudo chown -R "$(id -u):$(id -g)" /home/luke
+          tar -xf /tmp/render-input.tar -C /
+      - name: Prepare existing renderer dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg > /tmp/ffmpeg-install.log 2>&1
+          python3 -m venv /tmp/render-env
+          /tmp/render-env/bin/pip install --quiet "yt-dlp[default]==2026.10.26"
+          mkdir -p /home/luke/.venvs/tools/bin
+          ln -s /tmp/render-env/bin/yt-dlp /home/luke/.venvs/tools/bin/yt-dlp
+          ffmpeg -version
+      - name: Render three previews with one worker
+        run: |
+          RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/intake.py
+      - name: Retain private output for review
+        if: always()
+        run: |
+          python3 - <<'PACK'
+          from pathlib import Path
+          import tarfile
+          p=Path('/home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120')
+          names=['source-intake-receipts.json']
+          names += [str(f.relative_to(p)) for pattern in ['source-inspection/*','source-proxies/*.mp4','source-media/yt-*.mp4'] for f in p.glob(pattern) if f.is_file()]
+          with tarfile.open('/tmp/render-output.tar','w') as t:
+              for name in names:
+                  f=p/name
+                  if f.is_file(): t.add(f,arcname=name,recursive=False)
+          PACK
+          gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
