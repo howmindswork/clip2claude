@@ -31,7 +31,7 @@ jobs:
           mkdir -p /home/luke/.venvs/tools/bin
           ln -s /tmp/render-env/bin/yt-dlp /home/luke/.venvs/tools/bin/yt-dlp
           ffmpeg -version
-      - name: Render three previews with one worker
+      - name: Inspect six source clips with one worker
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
           timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/intake.py
@@ -50,3 +50,5 @@ jobs:
                   if f.is_file(): t.add(f,arcname=name,recursive=False)
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
+
+# Complete shared FFmpeg package, revision2.
