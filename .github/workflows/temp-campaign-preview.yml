@@ -34,7 +34,7 @@ jobs:
       - name: Render eight preview edits using the shared FFmpeg tools
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/intake.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/campaign_crossplatform_previews_20261120/render-previews.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -51,4 +51,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Complete shared FFmpeg package, preview2.
+# Complete shared FFmpeg package, preview3.
