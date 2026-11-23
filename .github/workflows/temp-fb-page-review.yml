@@ -27,12 +27,12 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg > /tmp/ffmpeg-install.log 2>&1
           python3 -m venv /tmp/render-env
-          /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "av==14.2.0" "pillow"
+          /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "av==14.2.0" "Pillow==12.2.0" "numpy==1.26.4" "fonttools==4.63.0"
           ffmpeg -version
       - name: Review two source clips using existing FFmpeg tools and independent VAD
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2/run.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 env PYTHONPATH=/home/luke/hmw-content:/home/luke/hmw-content/format_lab /tmp/render-env/bin/python /home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2/run_render.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -40,7 +40,7 @@ jobs:
           from pathlib import Path
           import tarfile
           p=Path('/home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2')
-          names=[str(f.relative_to(p)) for f in (p/'out').rglob('*') if f.is_file() and f.suffix in ('.json','.jpg','.png')]
+          names=[str(f.relative_to(p)) for f in (p/'out').rglob('*') if f.is_file() and f.suffix in ('.json','.jpg','.png','.mp4')]
           with tarfile.open('/tmp/render-output.tar','w') as t:
               for name in names:
                   f=p/name
@@ -53,3 +53,5 @@ jobs:
 # Final CW01 encoded identity input 69145514319caf6dc45e30ee5307baf9fa47f101a8a71ceff6b72f3028e2f66b
 
 # Three next complete source clips cfe4fdbc78c6fe8612de8cb297c687b7db4f12c1921de77cd01812b943ba85db
+
+# Canonical TK neutral header render 8a983795cd8065d890868767b5ea9a5ee1d0c862e330cdf7c6930c8517439938
