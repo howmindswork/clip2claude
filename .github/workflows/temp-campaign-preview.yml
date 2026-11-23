@@ -11,8 +11,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RENDER_TAG: campaign-harry-render-20261122-v1
-      RENDER_ID: '454970960'
+      RENDER_TAG: campaign-harry-audio-finish-20261122-v1
+      RENDER_ID: '454974021'
     steps:
       - name: Fetch private temporary media
         shell: bash
@@ -34,7 +34,7 @@ jobs:
       - name: Inspect one permitted official Twitch source using existing FFmpeg tools
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_harry_render.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_harry_audio_finish.py
       - name: Retain private output for review
         if: always()
         run: |
