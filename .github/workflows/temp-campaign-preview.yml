@@ -54,4 +54,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# NativeportraitPart1preview revision1:8actionscenesactualASR115seconds.
+# NativeportraitPart1preview revision2:measuredNicodoorshot,phoneonbench,safeareacaptions,CC0actionsounds.
