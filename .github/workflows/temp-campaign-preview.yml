@@ -55,4 +55,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Originalpilot revision4: closerframing,correctlocaljoints,HUDoutsidecamera,bundledfont.
+# Originalpilot revision5: measuredSVGaffinecamera,whitehoodandphonegrip,0_4_8_12clockproof.
