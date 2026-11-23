@@ -1,7 +1,7 @@
 name: Temporary Page source review
 on:
   push:
-    branches: [codex/fb-page-review-1123]
+    branches: [codex/fb-page-review2-1123]
 permissions:
   contents: write
 jobs:
