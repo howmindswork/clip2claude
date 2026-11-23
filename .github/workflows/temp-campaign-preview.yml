@@ -21,11 +21,11 @@ jobs:
           node-version: '22.22.1'
       - name: Fetch authenticated draft input
         run: |
-          RENDER_ASSET=$(gh api "repos/$GH_REPO/releases/$RENDER_ID/assets" --jq '.[] | select(.name=="audio-prep-input.tar") | .id')
-          gh api -H 'Accept: application/octet-stream' "repos/$GH_REPO/releases/assets/$RENDER_ASSET" > /tmp/audio-prep-input.tar
+          RENDER_ASSET=$(gh api "repos/$GH_REPO/releases/$RENDER_ID/assets" --jq '.[] | select(.name=="longform-preview-input.tar") | .id')
+          gh api -H 'Accept: application/octet-stream' "repos/$GH_REPO/releases/assets/$RENDER_ASSET" > /tmp/longform-preview-input.tar
           sudo mkdir -p /home/luke/hmw-content
           sudo chown -R "$(id -u):$(id -g)" /home/luke
-          tar -xf /tmp/audio-prep-input.tar -C /
+          tar -xf /tmp/longform-preview-input.tar -C /
           mkdir -p /home/luke/hmw-content/_work/youtube_original_20261122/{qa,deliver}
       - name: Prepare pinned incumbent runtime
         run: |
@@ -38,7 +38,7 @@ jobs:
       - name: Inspect source and prove20second scene using one CPU
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 python3 /home/luke/hmw-content/_work/youtube_original_20261122/run_audio_prep.py
+          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 bash /home/luke/hmw-content/_work/youtube_original_20261122/run_longform_preview.sh
       - name: Retain authenticated draft proof and diagnostics
         if: always()
         run: |
@@ -48,10 +48,10 @@ jobs:
           p=Path('/home/luke/hmw-content/_work/youtube_original_20261122')
           files=[x for folder in ['qa','deliver'] for x in (p/folder).rglob('*') if x.is_file()]
           files += [x for x in (p/'research').glob('source_contact*') if x.is_file()]
-          files += [x for x in (p/'short1/.hyperframes/artifacts/snapshots').rglob('*.png') if x.is_file()]
+          files += [x for x in (p/'longform/.hyperframes/artifacts/snapshots').rglob('*.png') if x.is_file()]
           with tarfile.open('/tmp/render-output.tar','w') as t:
             for x in files:t.add(x,arcname=str(x.relative_to(p)),recursive=False)
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Originalfilmprocessednarration revision1:verifiedchapter2artifactcut,normalizedAAConce,oneCPU.
+# Originalfilm64sceneactualDOMpreview revision1:processedcontinuousvoice,71frames,middle600to620proof.
