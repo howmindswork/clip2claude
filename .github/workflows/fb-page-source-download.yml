@@ -1,0 +1,25 @@
+name: Bounded Page source download control
+on:
+  push:
+    branches: [codex/fb-page-download-1123]
+permissions:
+  contents: read
+concurrency:
+  group: fb-page-source-download
+  cancel-in-progress: false
+jobs:
+  download:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - run: python3 -m pip install --quiet yt-dlp==2026.8.19 yt-dlp-ejs
+      - name: Download one public source without account cookies
+        run: |
+          mkdir -p out
+          timeout 120 python3 -m yt_dlp --js-runtimes node --no-playlist --socket-timeout 12 --retries 0 -f 'bv*[height<=1080][vcodec^=avc1]+ba[ext=m4a]/b[ext=mp4][vcodec^=avc1]' --merge-output-format mp4 --write-info-json -o 'out/%(id)s.avc.%(ext)s' 'https://www.youtube.com/watch?v=62-zqO4c_4I'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: page-source-control
+          path: out/
+          retention-days: 1
