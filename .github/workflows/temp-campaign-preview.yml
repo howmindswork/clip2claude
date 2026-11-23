@@ -54,4 +54,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# NativeportraitPart1preview revision3:removehookcaptionoverlap,caplastASRword,exactSFXslots,ledgerandparcelreadability.
+# NativeportraitPart1preview revision4:opaquecreambrandcapsuleandlightledgerlabel;allgeometrysnapshotsretainedoncheckfailure.
