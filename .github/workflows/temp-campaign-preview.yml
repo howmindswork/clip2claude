@@ -11,8 +11,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RENDER_TAG: campaign-twitch-preview-20261122-v4
-      RENDER_ID: '454961636'
+      RENDER_TAG: campaign-harry-intake-20261122-v1
+      RENDER_ID: '454965586'
     steps:
       - name: Fetch private temporary media
         shell: bash
@@ -27,14 +27,14 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg > /tmp/ffmpeg-install.log 2>&1
           python3 -m venv /tmp/render-env
-          /tmp/render-env/bin/pip install --quiet "yt-dlp[default]==2026.10.26"
+          /tmp/render-env/bin/pip install --quiet "yt-dlp[default]==2026.10.26" "gdown==6.1.0"
           mkdir -p /home/luke/.venvs/tools/bin
           ln -s /tmp/render-env/bin/yt-dlp /home/luke/.venvs/tools/bin/yt-dlp
           ffmpeg -version
       - name: Inspect one permitted official Twitch source using existing FFmpeg tools
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_preview.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_harry_intake.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -42,8 +42,7 @@ jobs:
           from pathlib import Path
           import tarfile
           p=Path('/home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime')
-          names=['preview-render-receipts.json']
-          names += [str(f.relative_to(p)) for f in (p/'sypher-preview').glob('*') if f.is_file()]
+          names=[str(f.relative_to(p)) for f in (p/'harry-new').glob('*') if f.is_file() and f.name!='official-episode.mp4']
           with tarfile.open('/tmp/render-output.tar','w') as t:
               for name in names:
                   f=p/name
