@@ -13,9 +13,9 @@ jobs:
       GH_REPO: ${{ github.repository }}
       RENDER_TAG: youtube-original-pilot-20261122
       RENDER_ID: '454956357'
-      CHUNK_INDEX: '2'
-      CHUNK_START: '360.0'
-      CHUNK_END: '540.0'
+      CHUNK_INDEX: '3'
+      CHUNK_START: '540.0'
+      CHUNK_END: '720.0'
       HYPERFRAMES_CLI: /tmp/render-runtime/node_modules/.bin/hyperframes
       HYPERFRAMES_BROWSER_PATH: /usr/bin/google-chrome
     steps:
@@ -52,9 +52,9 @@ jobs:
           files=[x for folder in ['qa','deliver'] for x in (p/folder).rglob('*') if x.is_file()]
           files += [x for x in (p/'research').glob('source_contact*') if x.is_file()]
           files += [x for x in (p/'longform/.hyperframes/artifacts/snapshots').rglob('*.png') if x.is_file()]
-          with tarfile.open('/tmp/movie-chunk-02-output.tar','w') as t:
+          with tarfile.open('/tmp/movie-chunk-03-output.tar','w') as t:
             for x in files:t.add(x,arcname=str(x.relative_to(p)),recursive=False)
           PACK
-          gh release upload "$RENDER_TAG" /tmp/movie-chunk-02-output.tar --repo "$GH_REPO" --clobber
+          gh release upload "$RENDER_TAG" /tmp/movie-chunk-03-output.tar --repo "$GH_REPO" --clobber
 
-# Originalfilmfrozen serialchunk 2: 360.0to540.0, oneCPU,15mincap.
+# Originalfilmfrozen serialchunk 3: 540.0to720.0, oneCPU,15mincap.
