@@ -11,8 +11,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RENDER_TAG: campaign-twitch-preview-20261122-v3
-      RENDER_ID: '454957236'
+      RENDER_TAG: campaign-twitch-preview-20261122-v4
+      RENDER_ID: '454961636'
     steps:
       - name: Fetch private temporary media
         shell: bash
@@ -34,7 +34,7 @@ jobs:
       - name: Inspect one permitted official Twitch source using existing FFmpeg tools
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_intake.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 /tmp/render-env/bin/python /home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime/hosted_preview.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -42,8 +42,8 @@ jobs:
           from pathlib import Path
           import tarfile
           p=Path('/home/luke/hmw-content/_work/youtube_five_daily_20261122/campaign_runtime')
-          names=['sypher_official_native_clip.mp4','source-review-proxy.mp4','source-contact.png','source-probe.json','source-look.json','source-proxy.json','source-intake-receipt.json','source-download.private.log','reference-contact.png','reference-look.json','source-frames.json']
-          names += [str(f.relative_to(p)) for f in p.glob('source-frame*.png') if f.is_file()]
+          names=['preview-render-receipts.json']
+          names += [str(f.relative_to(p)) for f in (p/'sypher-preview').glob('*') if f.is_file()]
           with tarfile.open('/tmp/render-output.tar','w') as t:
               for name in names:
                   f=p/name
