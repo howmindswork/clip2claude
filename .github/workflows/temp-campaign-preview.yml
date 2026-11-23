@@ -21,11 +21,11 @@ jobs:
           node-version: '22.22.1'
       - name: Fetch authenticated draft input
         run: |
-          RENDER_ASSET=$(gh api "repos/$GH_REPO/releases/$RENDER_ID/assets" --jq '.[] | select(.name=="render-input.tar") | .id')
-          gh api -H 'Accept: application/octet-stream' "repos/$GH_REPO/releases/assets/$RENDER_ASSET" > /tmp/render-input.tar
+          RENDER_ASSET=$(gh api "repos/$GH_REPO/releases/$RENDER_ID/assets" --jq '.[] | select(.name=="audio-prep-input.tar") | .id')
+          gh api -H 'Accept: application/octet-stream' "repos/$GH_REPO/releases/assets/$RENDER_ASSET" > /tmp/audio-prep-input.tar
           sudo mkdir -p /home/luke/hmw-content
           sudo chown -R "$(id -u):$(id -g)" /home/luke
-          tar -xf /tmp/render-input.tar -C /
+          tar -xf /tmp/audio-prep-input.tar -C /
           mkdir -p /home/luke/hmw-content/_work/youtube_original_20261122/{qa,deliver}
       - name: Prepare pinned incumbent runtime
         run: |
@@ -38,7 +38,7 @@ jobs:
       - name: Inspect source and prove20second scene using one CPU
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 bash /home/luke/hmw-content/_work/youtube_original_20261122/run_short1_render.sh
+          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 python3 /home/luke/hmw-content/_work/youtube_original_20261122/run_audio_prep.py
       - name: Retain authenticated draft proof and diagnostics
         if: always()
         run: |
@@ -54,4 +54,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# NativeportraitPart1finalcapture revision1:actualpreviewvalidatedfirst,115sfullencodedAVtechnicalproof.
+# Originalfilmprocessednarration revision1:verifiedchapter2artifactcut,normalizedAAConce,oneCPU.
