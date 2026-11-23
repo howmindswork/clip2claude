@@ -1,4 +1,4 @@
-name: Temporary isolated video render
+name: Temporary Page source review
 on:
   push:
     branches: [codex/fb-page-review-1123]
@@ -27,7 +27,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg > /tmp/ffmpeg-install.log 2>&1
           python3 -m venv /tmp/render-env
-          /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "pillow"
+          /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "av==14.2.0" "pillow"
           ffmpeg -version
       - name: Review three source clips using existing FFmpeg tools and independent VAD
         run: |
@@ -48,4 +48,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Pinned existing FFmpeg toolkit, one official Twitch intake.
+# Existing FFmpeg toolkit; three Page sources and a known speech control.
