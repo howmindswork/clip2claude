@@ -29,10 +29,10 @@ jobs:
           python3 -m venv /tmp/render-env
           /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "av==14.2.0" "Pillow==12.2.0" "numpy==1.26.4" "fonttools==4.63.0"
           ffmpeg -version
-      - name: Render screened Page clips with the canonical builder and cleaner
+      - name: Review nine complete sources and a known speech control
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 env PYTHONPATH=/home/luke/hmw-content:/home/luke/hmw-content/format_lab /tmp/render-env/bin/python /home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2/run_render.py
+          timeout 780 taskset -c "$RENDER_CORE" nice -n 19 env PYTHONPATH=/home/luke/hmw-content:/home/luke/hmw-content/format_lab /tmp/render-env/bin/python /home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2/run.py
       - name: Retain private output for review
         if: always()
         run: |
@@ -57,3 +57,5 @@ jobs:
 # Canonical TK neutral header render 8a983795cd8065d890868767b5ea9a5ee1d0c862e330cdf7c6930c8517439938
 
 # Three screened canonical renders 668981df9ae29fd499bafe2b41c1ab9e30e380b2057e910cd7e1150c09c2ed1b
+
+# Nine new sources f38a1b900457b508f5125912800cdf75fb10d11f054827e2e18b833d7dd35119
