@@ -55,4 +55,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# Originalpilot revision3: nonoverlappingcountertext, readablecontrast, timedclockcloseup, snapshotbeforeguard.
+# Originalpilot revision4: closerframing,correctlocaljoints,HUDoutsidecamera,bundledfont.
