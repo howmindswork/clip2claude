@@ -38,7 +38,7 @@ jobs:
       - name: Inspect source and prove20second scene using one CPU
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
-          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 bash /home/luke/hmw-content/_work/youtube_original_20261122/run_short2_preview.sh
+          timeout 660 taskset -c "$RENDER_CORE" nice -n 19 bash /home/luke/hmw-content/_work/youtube_original_20261122/run_short2_render.sh
       - name: Retain authenticated draft proof and diagnostics
         if: always()
         run: |
@@ -54,4 +54,4 @@ jobs:
           PACK
           gh release upload "$RENDER_TAG" /tmp/render-output.tar --repo "$GH_REPO" --clobber
 
-# NativeportraitPart2preview revision1:approvedrig,pairedOFFconversation,testedbellcounters,correctedvoice,ASRcaptions.
+# NativeportraitPart2fullcapture revision1:actualpairedpreviewreviewed,128.5s,wholeencodedtechnicalproof.
