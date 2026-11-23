@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     steps:
-      - run: python3 -m pip install --quiet yt-dlp==2026.8.19 yt-dlp-ejs
+      - run: python3 -m pip install --quiet yt-dlp==2026.10.26 yt-dlp-ejs
       - name: Download one public source without account cookies
         run: |
           mkdir -p out
