@@ -11,8 +11,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RENDER_TAG: campaign-twitch-preview-20261122
-      RENDER_ID: '454953846'
+      RENDER_TAG: campaign-twitch-preview-20261122-v2
+      RENDER_ID: '454955273'
     steps:
       - name: Fetch private temporary media
         shell: bash
