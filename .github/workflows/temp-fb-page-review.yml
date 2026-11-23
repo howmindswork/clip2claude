@@ -29,7 +29,7 @@ jobs:
           python3 -m venv /tmp/render-env
           /tmp/render-env/bin/pip install --quiet "faster-whisper==1.2.1" "av==14.2.0" "Pillow==12.2.0" "numpy==1.26.4" "fonttools==4.63.0"
           ffmpeg -version
-      - name: Review seven full sources and known speech control
+      - name: Review five worker sources and known speech control
         run: |
           RENDER_CORE=$(python3 -c 'import os; print(min(os.sched_getaffinity(0)))')
           timeout 780 taskset -c "$RENDER_CORE" nice -n 19 env PYTHONPATH=/home/luke/hmw-content:/home/luke/hmw-content/format_lab /tmp/render-env/bin/python /home/luke/hmw-content/_work/facebook_hourly_20261122/hosted_review2/run.py
@@ -63,3 +63,5 @@ jobs:
 # Four screened render inputs 3f58323f2510538308428b62bb14e34e78ed9b9da3a42cd3d4feb9743b8a7614
 
 # Seven new sources 2a3a862bb7a52acf1364845eaf16c2ebcd480683307e1cf60076908fb44194bb
+
+# Five new source clips 2a6a2849519a6db5829ff0bb428bfc3d96abff58c0ba7cc8d326bc35314fef85
